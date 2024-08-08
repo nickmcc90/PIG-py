@@ -1,1 +1,116 @@
 First init
+
+We need to ask the user to role the dice, so we'll have a number generator.
+We need to ask if they want to keep rolling.
+Have a total score for a player.
+End the game after someone reaches 50.
+
+
+1. Import random.
+2. Define a roll function.
+This is how we will get a number 1-6.
+We will use randomint like before.
+3. Ask the player how many players are playing until they give a valid answer.
+Have an if statement to check if input is a digit.
+Have an if statement to check if their input is between 2 and 4.
+Like this:
+
+while True:
+    players = input("Enter the number of players (2-4): ")
+    if players.isdigit():
+        players = int(players)
+        if 2 <= players <= 4:
+            break
+        else:
+            print("Must be between 2 - 4 players.")
+    else:
+        print("Invalid, try again.")
+
+4. Define some variables.
+Define a max_score.
+Define a size of an array based on the number of players. Like this:
+
+max_score = 50
+player_scores = [0 for _ in range(players)]
+** This is called a list comprehension.
+
+5. Set up the while loop for the game.
+The condition for the while loop to keep going is whenever
+it takes the max of the player_scores, it keeps going as long
+as it is below 50.
+
+6. We ask the player if they wanna roll. If yes, then we continue.
+If not, we break the loop. The loop is pretty simple for now.
+
+7. We grab a roll value by calling the roll function. We must check
+if it is equal to 1 to delete their score, or equal to 2-6 to add to
+their score. 
+We also wanna add a current_score = 0 for now. Everything should
+look like this:
+
+while max(player_scores) < max_score:
+    current_score = 0
+
+    should_roll = input("Would you like to roll? (y/n)? ").lower()
+    if should_roll != 'y':
+        break
+    
+    value = roll()
+    if value == 1:
+        print("You rolled a 1! Turn done.")
+        break
+    else:
+        current_score += value
+        print("You rolled a:", value)
+        print("Your score is:", current_score)
+
+8. Since we iterate through each persons turn, we will want a for loop
+inside this big while loop, and have the code above inside another while
+loop. Like this:
+
+while max(player_scores) < max_score:
+    for player_idx in range(players):
+        current_score = 0
+        while True:
+            should_roll = input("Would you like to roll? (y/n)? ").lower()
+            if should_roll != 'y':
+                break
+            
+            value = roll()
+            if value == 1:
+                print("You rolled a 1! Turn done.")
+                break
+            else:
+                current_score += value
+                print("You rolled a:", value)
+                print("Your score is:", current_score)
+
+9. After a player turn is done, we add their total score to the player_scores
+array based on their index. Like this:
+
+        player_scores[player_idx] += current_score
+        print("Your total score is:", player_scores[player_idx])
+
+10. Make sure to add that the current_score is 0 when they roll a one.
+11. At the beginning of each player's turn we will want to introduce their
+turn. Like this: (so at the beginning of the for loop)
+        
+        print("\nPlayer " + str(player_idx + 1) + "'s turn has just started.\n")
+
+12. We should tell the player at the beginning of their turn what their score is.
+Like this: (beginning of the for loop)
+        print("Your total score is:", player_scores[player_idx])
+
+13. We want to give everyone have a last roll even if someone reaches 50, if
+it wasn't the last person to get a 50. Also, the people who continue to roll
+are the people left over in an iteration through the players array if someone
+before them gets a 50.
+
+14. Find the max_score, and get the index of that score to see which player won.
+
+Like this:
+max_score = max(player_scores)
+winning_idx = player_scores.index(max_score)
+print("Player number", winning_idx + 1, "is the winner with a score of:", max_score)
+
+15. Game should be done!
